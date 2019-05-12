@@ -2,6 +2,7 @@
 using UnityEngine;
 using System;
 using System.Text.RegularExpressions;
+using System.Linq;
 
 public class ShapeCreator : MonoBehaviour
 {
@@ -271,9 +272,11 @@ public class ShapeCreator : MonoBehaviour
                 foreach (string name in dict.Keys)
                 {
                     Regex regex = new Regex(regExp);
-                    MatchCollection matches = regex.Matches(name);
-                    if (matches.Count > 0)
-                    {
+
+                    string[] matches = Regex.Matches(name, regExp)
+                    .OfType<Match>()
+                    .Select(m => m.Value)
+                    .ToArray();
                         foreach (string mat in matches)
                         {
                             try
@@ -285,7 +288,7 @@ public class ShapeCreator : MonoBehaviour
                                 Debug.Log(e.Message);
                             }
                         }
-                    }
+                     
                 }
             }
             return curInt;

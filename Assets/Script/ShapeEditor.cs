@@ -18,12 +18,8 @@ public class ShapeEditor : Editor
 
         if (guiEvent.type == EventType.MouseDown && guiEvent.button == 0)
         {
-            Debug.Log("push: " + guiEvent.mousePosition);
-
             Vector2 pos = new Vector2(mouseRay.origin.x, mouseRay.origin.y);
-            Debug.Log("pos: " + pos);
             GraphNode grnod = new GraphNode(mouseRay.origin.x, mouseRay.origin.y, 5);
-            Debug.Log("node:" + grnod);
             shapeCreator.addNode(grnod);
             Debug.Log("add: " + pos);
             needsRepaint = true;
