@@ -13,7 +13,14 @@ public class ShapeCreator : MonoBehaviour
     private Dictionary<string, GraphPointOnEdge> poes;
 
 
-
+    public ShapeCreator()
+    {
+        Debug.Log("Construct ShapeCreator");
+        nodes = new Dictionary<string, GraphNode>();
+        edges = new Dictionary<string, GraphEdge>();
+        polygons = new Dictionary<string, GraphPolygon4>();
+        poes = new Dictionary<string, GraphPointOnEdge>();
+    }
 
     /*
     graphSource.addNode(200,200, "n1");		
@@ -29,6 +36,12 @@ public class ShapeCreator : MonoBehaviour
     graphSource.addPoly(polyFloat4, "poly4");
     loadGraph();
 */
+
+    void Awake()
+    {
+        Debug.Log("Awake ShapeCreator");
+
+    }
 
 
 
@@ -79,6 +92,7 @@ public class ShapeCreator : MonoBehaviour
 
     public Dictionary<string, GraphNode> getNodes()
     {
+        Debug.Log("Get Nodes " + this.nodes.GetType());
         return this.nodes;
     }
 
@@ -125,10 +139,19 @@ public class ShapeCreator : MonoBehaviour
         return this.edges;
     }
 
+    public void addNode(GraphNode node)
+    {
+        string name = getNewNodeName();
+        this.nodes[name] = node;
+        Debug.Log("addNode:" + node);
+    }
+
     public void addNode(string name, GraphNode node)
     {
         this.nodes[name] = node;
     }
+
+
 
 
 

@@ -18,8 +18,13 @@ public class ShapeEditor : Editor
 
         if (guiEvent.type == EventType.MouseDown && guiEvent.button == 0)
         {
+            Debug.Log("push: " + guiEvent.mousePosition);
+
             Vector2 pos = new Vector2(mouseRay.origin.x, mouseRay.origin.y);
-            shapeCreator.points.Add(pos);
+            Debug.Log("pos: " + pos);
+            GraphNode grnod = new GraphNode(mouseRay.origin.x, mouseRay.origin.y, 5);
+            Debug.Log("node:" + grnod);
+            shapeCreator.addNode(grnod);
             Debug.Log("add: " + pos);
             needsRepaint = true;
 
@@ -30,9 +35,10 @@ public class ShapeEditor : Editor
             shapeCreator.points.Clear();
         }
 
-        for (int i = 0; i < shapeCreator.points.Count; i++)
+
+        foreach (KeyValuePair<string, GraphNode> gn in shapeCreator.getNodes()) 
         {
-            Handles.DrawSolidDisc(shapeCreator.points[i], Vector3.forward, .3f);
+            Handles.DrawSolidDisc(new Vector2(gn.Value.getX(), gn.Value.getY()), Vector3.forward, .3f);
         }
 
         if (needsRepaint)
@@ -48,6 +54,10 @@ public class ShapeEditor : Editor
 
      void OnEnable()
     {
-        shapeCreator = target as ShapeCreator;
+        //shapeCreator = target as ShapeCreator;
+        GameObject thePlayer = GameObject.Find("shapeCreator");
+        Debug.Log("thePlayer: " + thePlayer);
+        this.shapeCreator = thePlayer.GetComponent<ShapeCreator>();
+        Debug.Log("shapeCreator: " + shapeCreator);
     }
 }

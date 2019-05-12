@@ -214,7 +214,7 @@ GameObject:
   - component: {fileID: 1037613921}
   - component: {fileID: 1037613920}
   m_Layer: 0
-  m_Name: GameObject
+  m_Name: shapeCreator
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -232,7 +232,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ed9c3e21a7cd2d7438fdc276ba9ebb50, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  points: []
+  points:
+  - {x: -3.6280067, y: 1.2821488}
+  - {x: -4.197851, y: -0.6743155}
 --- !u!4 &1037613921
 Transform:
   m_ObjectHideFlags: 0
