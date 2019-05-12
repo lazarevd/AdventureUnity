@@ -37,7 +37,7 @@ public class GraphEdge
 
     public string getThisId()
     {
-        string ret = null;
+        string ret = null; 
 
         foreach (KeyValuePair<string, GraphEdge> entry in shapeCreator.getEdges())
         {
@@ -57,7 +57,7 @@ public class GraphEdge
 
         bool res = false;
 
-        GraphPolygon4 square = new GraphPolygon4(getEdgeSquare(), 0);
+        GraphPolygon4 square = new GraphPolygon4(getEdgeSquare());
 
         res = square.isPointInside(xy);
 
@@ -112,8 +112,6 @@ public class GraphEdge
         vertices[5] = resNormal2.y + fn.y;
         vertices[6] = resNormal1.x + fn.x;
         vertices[7] = resNormal1.y + fn.y;
-
-
 
         return vertices;
 

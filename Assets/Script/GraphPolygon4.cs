@@ -21,6 +21,7 @@ public class GraphPolygon4
 
     public GraphPolygon4()
     {
+        vertices = new float[0];
         GameObject thePlayer = GameObject.Find("shapeCreator");
         shapeCreator = thePlayer.GetComponent<ShapeCreator>();
         pointsOnEdges = new List<string>();
@@ -30,19 +31,19 @@ public class GraphPolygon4
 
 
 
-    public GraphPolygon4(float[] vertices, float renderScale)
+    public GraphPolygon4(float[] vertices) : this()
     {
         this.setVertices(vertices);
     }
 
 
 
-    public void setVertices(float[] vertices)
+    public void setVertices(float[] vert)
     {
 
-        if (vertices.Length == 8)
+        if (vert.Length == 8)
         {
-            setVertices(vertices);
+            this.vertices=vert;
         }
         else throw new ArgumentException("polygons must contain only 4 points.");
 
@@ -153,7 +154,7 @@ public class GraphPolygon4
 
     public float[] getVertices()
     {
-        return this.vertices;
+        return vertices;
     }
 
     public Vector2 getVertexXY(int i)

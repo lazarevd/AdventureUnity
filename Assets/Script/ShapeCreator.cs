@@ -21,28 +21,12 @@ public class ShapeCreator : MonoBehaviour
         edges = new Dictionary<string, GraphEdge>();
         polygons = new Dictionary<string, GraphPolygon4>();
         poes = new Dictionary<string, GraphPointOnEdge>();
-    }
-
-    /*
-    graphSource.addNode(200,200, "n1");		
-    graphSource.addNode(400,250, "n2");
-    graphSource.addEdge("n1", "n2", "e2");
-    float[] polyFloat = {100,100,200,100,200,200,100,200};
-    float[] polyFloat2 = {150,200,250,200,250,300,150,300};
-    float[] polyFloat3 = {200,300,300,300,300,400,200,400};
-    float[] polyFloat4 = {250,400,350,400,350,500,250,500};
-    graphSource.addPoly(polyFloat, "poly1");
-    graphSource.addPoly(polyFloat2, "poly2");
-    graphSource.addPoly(polyFloat3, "poly3");
-    graphSource.addPoly(polyFloat4, "poly4");
-    loadGraph();
-*/
-
-    void Awake()
-    {
-        Debug.Log("Awake ShapeCreator");
 
     }
+
+
+
+
 
 
 
@@ -78,6 +62,10 @@ public class ShapeCreator : MonoBehaviour
     }
 
 
+    public GraphNode getNodeByName(string nodName) 
+    {
+        return nodes[nodName];
+    }
 
 
     public GraphPointOnEdge getPOEById(string name)
@@ -188,6 +176,7 @@ public class ShapeCreator : MonoBehaviour
     {
         if (polygon != null)
         {
+            Debug.Log("Add poly:" + polygon.getVertices()[0]+":"+ polygon.getVertices()[1]);
             this.polygons[name] = polygon;
         }
     }
