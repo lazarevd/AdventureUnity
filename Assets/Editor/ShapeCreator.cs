@@ -13,6 +13,12 @@ public class ShapeCreator : MonoBehaviour
     private Dictionary<string, GraphPolygon4> polygons;
     private Dictionary<string, GraphPointOnEdge> poes;
 
+    public bool NODE = false;
+    public bool POLY = true;
+
+    public enum ToolDisplayStatus { HOVERNODEPOLYGON, HOVERPOLYGON, HOVERPOE, HOVERNODE, HOVEREDGE, NORMAL };
+
+    ToolDisplayStatus toolDisplayStatus = ToolDisplayStatus.NORMAL;
 
     public ShapeCreator()
     {
@@ -24,10 +30,15 @@ public class ShapeCreator : MonoBehaviour
 
     }
 
+    public ToolDisplayStatus getToolDisplayStatus()
+    {
+        return this.toolDisplayStatus;
+    }
 
-
-
-
+    public void setToolDisplayStatus(ToolDisplayStatus displayMode)
+    {
+        this.toolDisplayStatus = displayMode;
+    }
 
 
 

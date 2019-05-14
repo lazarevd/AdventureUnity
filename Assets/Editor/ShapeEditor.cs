@@ -10,12 +10,27 @@ public class ShapeEditor : Editor
     ShapeCreator shapeCreator;
     bool needsRepaint;
 
+
+    public Vector2 getMouseRay()
+    {
+        Ray mouseRay = HandleUtility.GUIPointToWorldRay(Event.current.mousePosition);
+        Vector2 pos = new Vector2(mouseRay.origin.x, mouseRay.origin.y);
+        Debug.Log("getMouseRay: " + pos);
+        return pos;
+    }
+
+    public Vector2 getMouseScreen()
+    {
+        Vector2 pos = HandleUtility.GUIPointToScreenPixelCoordinate(Event.current.mousePosition);
+        Debug.Log("getMouseRay: " + pos);
+        return pos;
+    }
+
+
     void OnSceneGUI()
     {
         Event guiEvent = Event.current;
-
         Ray mouseRay = HandleUtility.GUIPointToWorldRay(guiEvent.mousePosition);
-
         if (guiEvent.type == EventType.MouseDown && guiEvent.button == 0)
         {
             Vector2 pos = new Vector2(mouseRay.origin.x, mouseRay.origin.y);
@@ -23,7 +38,6 @@ public class ShapeEditor : Editor
             shapeCreator.addNode(grnod);
             Debug.Log("add: " + pos);
             needsRepaint = true;
-
         }
 
         if (shapeCreator.points.Count > 4)
@@ -31,13 +45,9 @@ public class ShapeEditor : Editor
             shapeCreator.points.Clear();
         }
 
-
-
         renderNodes();
         renderEdges();
         renderPolygons();
-
-
 
         if (needsRepaint)
         {
