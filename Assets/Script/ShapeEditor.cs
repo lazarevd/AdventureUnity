@@ -5,10 +5,11 @@ using UnityEngine;
 
 
 [CustomEditor(typeof(ShapeCreator))]
-public class ShapeEditor : Editor
+public class ShapeEditor : Editor, CoordHolder
 {
     ShapeCreator shapeCreator;
     bool needsRepaint;
+    private Tool curTool;
 
 
     public Vector2 getMouseRay()
@@ -29,6 +30,12 @@ public class ShapeEditor : Editor
 
     void OnSceneGUI()
     {
+/*
+        if (ToolBox.processTool(curTool))
+        {//Если ToolBox вернул true, значит инструмент завершил работу и его можно удалить
+            curTool = null;
+        }
+*/
         Event guiEvent = Event.current;
         Ray mouseRay = HandleUtility.GUIPointToWorldRay(guiEvent.mousePosition);
         if (guiEvent.type == EventType.MouseDown && guiEvent.button == 0)
@@ -122,6 +129,7 @@ public class ShapeEditor : Editor
             shapeCreator.addNode("n1", new GraphNode(-4.5f, 2.5f, 5));
             shapeCreator.addNode("n2", new GraphNode(1f, -2f, 5));
             shapeCreator.addEdge("e2", new GraphEdge("n1", "n2"));
+
         }
 
         if (GUILayout.Button("Add poly"))
@@ -130,6 +138,16 @@ public class ShapeEditor : Editor
             float[] polyFloat = { -1.5f, 0f, -1.5f, -1.0f, 1.5f, 0f, 0f, 1.5f };
             shapeCreator.addPolygon("poly1", new GraphPolygon4(polyFloat));
 
+        }
+
+        if (GUILayout.Button("Move"))
+        {
+            ToolBox.stopTool(curTool);
+            if (curTool == null)
+            {
+                curTool = new MoveNodePoly();
+                curTool.prepare();
+            }
         }
 
 
@@ -154,8 +172,6 @@ loadGraph();
     {
         //shapeCreator = target as ShapeCreator;
         GameObject thePlayer = GameObject.Find("shapeCreator");
-        Debug.Log("thePlayer: " + thePlayer);
         this.shapeCreator = thePlayer.GetComponent<ShapeCreator>();
-        Debug.Log("shapeCreator: " + shapeCreator);
     }
 }

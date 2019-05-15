@@ -18,4 +18,3 @@ using UnityEngine;
         void finish();
 
     }
-}

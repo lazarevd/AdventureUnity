@@ -8,7 +8,7 @@ public class ToolBox
     public static bool processTool(Tool tool)
     { //returns true if finished
 
-        bool result = false;
+        bool result = true;
 
         if (tool != null)
         {

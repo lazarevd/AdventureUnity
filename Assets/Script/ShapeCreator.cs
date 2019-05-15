@@ -12,9 +12,12 @@ public class ShapeCreator : MonoBehaviour
     private Dictionary<string, GraphEdge> edges;
     private Dictionary<string, GraphPolygon4> polygons;
     private Dictionary<string, GraphPointOnEdge> poes;
-
-    public bool NODE = false;
+    [HideInInspector]
+    public bool NODE = true;
+    [HideInInspector]
     public bool POLY = true;
+
+
 
     public enum ToolDisplayStatus { HOVERNODEPOLYGON, HOVERPOLYGON, HOVERPOE, HOVERNODE, HOVEREDGE, NORMAL };
 

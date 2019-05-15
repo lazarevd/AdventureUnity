@@ -232,9 +232,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ed9c3e21a7cd2d7438fdc276ba9ebb50, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  points:
-  - {x: -3.6280067, y: 1.2821488}
-  - {x: -4.197851, y: -0.6743155}
+  points: []
+  NODE: 0
+  POLY: 1
 --- !u!4 &1037613921
 Transform:
   m_ObjectHideFlags: 0
