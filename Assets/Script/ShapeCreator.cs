@@ -3,6 +3,7 @@ using UnityEngine;
 using System;
 using System.Text.RegularExpressions;
 using System.Linq;
+using UnityEditor;
 
 public class ShapeCreator : MonoBehaviour
 {
@@ -31,6 +32,22 @@ public class ShapeCreator : MonoBehaviour
         polygons = new Dictionary<string, GraphPolygon4>();
         poes = new Dictionary<string, GraphPointOnEdge>();
 
+    }
+
+
+    public Vector2 getMouseRay()
+    {
+        Ray mouseRay = HandleUtility.GUIPointToWorldRay(Event.current.mousePosition);
+        Vector2 pos = new Vector2(mouseRay.origin.x, mouseRay.origin.y);
+        //Debug.Log("getMouseRay: " + pos);
+        return pos;
+    }
+
+    public Vector2 getMouseScreen()
+    {
+        Vector2 pos = HandleUtility.GUIPointToScreenPixelCoordinate(Event.current.mousePosition);
+        //Debug.Log("getMouseScreen: " + pos);
+        return pos;
     }
 
     public ToolDisplayStatus getToolDisplayStatus()
@@ -95,7 +112,6 @@ public class ShapeCreator : MonoBehaviour
 
     public Dictionary<string, GraphNode> getNodes()
     {
-        Debug.Log("Get Nodes " + this.nodes.GetType());
         return this.nodes;
     }
 

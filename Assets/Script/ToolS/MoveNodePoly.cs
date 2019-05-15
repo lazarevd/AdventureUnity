@@ -6,14 +6,12 @@ using UnityEngine;
 public class MoveNodePoly : Tool
 {
 
-    CoordHolder coordHolder;
     ShapeCreator shapeCreator;
 
     public MoveNodePoly()
     {
         GameObject go = GameObject.Find("shapeCreator");
         this.shapeCreator = go.GetComponent<ShapeCreator>();
-        coordHolder = go.GetComponent<CoordHolder>();
         shapeCreator = go.GetComponent<ShapeCreator>();
     }
 
@@ -47,7 +45,7 @@ public class MoveNodePoly : Tool
     public void process()
 {
 
-        Debug.Log("MoveNodePoly process");
+        //Debug.Log("MoveNodePoly process");
 
     if (shapeCreator.NODE == true && shapeCreator.POLY == true)
     {
@@ -78,10 +76,13 @@ public class MoveNodePoly : Tool
 public void movePolygonVertex()
 {
 
-    Vector2 touchPos = coordHolder.getMouseRay();
 
+    Vector2 touchPos = shapeCreator.getMouseRay();
+    Event guiEvent = Event.current;
+        if (guiEvent.type == EventType.MouseDrag && guiEvent.button == 0) {
+            Debug.Log("movePolygonVertex");
 
-        if (shapeCreator.POLY == true)
+            if (shapeCreator.POLY == true)
         {
             List<GraphPolygon4> polys = new List<GraphPolygon4>();
 
@@ -102,19 +103,19 @@ public void movePolygonVertex()
                 curPolygon = polys[polys.Count - 1];// Test only
                 movePolygon = curPolygon;
                 moveVertex = 1;
-                nodDistance = curPolygon.getDistanceToVertex(1, coordHolder.getMouseScreen().x, coordHolder.getMouseScreen().y);
+                nodDistance = curPolygon.getDistanceToVertex(1, shapeCreator.getMouseRay().x, shapeCreator.getMouseRay().y);
 
                 curDistance = 0;
                 foreach (GraphPolygon4 pol in polys)
                 {//Loop polys
 
                     curVertex = 1;
-                    curDistance = pol.getDistanceToVertex(1, coordHolder.getMouseScreen().x, coordHolder.getMouseScreen().y);
+                    curDistance = pol.getDistanceToVertex(1, shapeCreator.getMouseRay().x, shapeCreator.getMouseRay().y);
 
 
                     for (int i = 1; i <= 4; i++)
                     {
-                        distance = pol.getDistanceToVertex(i, coordHolder.getMouseScreen().x, coordHolder.getMouseScreen().y);
+                        distance = pol.getDistanceToVertex(i, shapeCreator.getMouseRay().x, shapeCreator.getMouseRay().y);
                         if (distance < curDistance)
                         {
                             curVertex = i;
@@ -131,16 +132,18 @@ public void movePolygonVertex()
                     movePolygon = curPolygon;
                 }
 
-                if (movePolygon.getDistanceToVertex(moveVertex, coordHolder.getMouseScreen().x, coordHolder.getMouseScreen().y) < 20)
+                    Debug.Log("the distance " + movePolygon.getDistanceToVertex(moveVertex, shapeCreator.getMouseRay().x, shapeCreator.getMouseRay().y));
+
+                if (movePolygon.getDistanceToVertex(moveVertex, shapeCreator.getMouseRay().x, shapeCreator.getMouseRay().y) < 20)
                 {
-                    movePolygon.setVertexXY(moveVertex, coordHolder.getMouseScreen().x, coordHolder.getMouseScreen().y);
+                    movePolygon.setVertexXY(moveVertex, shapeCreator.getMouseRay().x, shapeCreator.getMouseRay().y);
                     //RenderShapes.drawPoint(UI.getCursor(), 5, RenderShapes.Colour.RED);
                 }
             }
 
         }
-
-}
+        }
+    }
 
 
 
@@ -149,7 +152,7 @@ public void moveNode()
         Event guiEvent = Event.current;
         if (guiEvent.type == EventType.MouseDown && guiEvent.button == 0)
     {
-            Vector2 touchPos = coordHolder.getMouseRay();
+            Vector2 touchPos = shapeCreator.getMouseRay();
             if (shapeCreator.NODE == true)
         {
             GraphNode moveNode;
@@ -166,15 +169,15 @@ public void moveNode()
                 foreach (GraphNode nod in nodes)
                 {
                         
-                    if (nod.getDistance(touchPos.x, coordHolder.getMouseScreen().y) < moveNode.getDistance(coordHolder.getMouseScreen().x, coordHolder.getMouseScreen().y))
+                    if (nod.getDistance(touchPos.x, shapeCreator.getMouseScreen().y) < moveNode.getDistance(shapeCreator.getMouseScreen().x, shapeCreator.getMouseScreen().y))
                     {
                         moveNode = nod;
                     }
                 }
-                if (moveNode.getDistance(coordHolder.getMouseScreen().x, coordHolder.getMouseScreen().y) < 20)
+                if (moveNode.getDistance(shapeCreator.getMouseScreen().x, shapeCreator.getMouseScreen().y) < 20)
                 {
-                    moveNode.setX(coordHolder.getMouseScreen().x);
-                    moveNode.setY(coordHolder.getMouseScreen().y);
+                    moveNode.setX(shapeCreator.getMouseScreen().x);
+                    moveNode.setY(shapeCreator.getMouseScreen().y);
                 }
 
             }

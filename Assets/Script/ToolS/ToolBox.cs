@@ -8,7 +8,8 @@ public class ToolBox
     public static bool processTool(Tool tool)
     { //returns true if finished
 
-        bool result = true;
+
+        bool result = false;
 
         if (tool != null)
         {
@@ -37,6 +38,7 @@ public class ToolBox
         if (tool != null)
         {
             tool.setStatus(ToolStatus.FINISHED);
+            Debug.Log("Stop tool " + tool.GetType());
         }
     }
 }

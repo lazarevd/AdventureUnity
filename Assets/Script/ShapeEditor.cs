@@ -5,38 +5,28 @@ using UnityEngine;
 
 
 [CustomEditor(typeof(ShapeCreator))]
-public class ShapeEditor : Editor, CoordHolder
+public class ShapeEditor : Editor
 {
     ShapeCreator shapeCreator;
     bool needsRepaint;
     private Tool curTool;
 
 
-    public Vector2 getMouseRay()
-    {
-        Ray mouseRay = HandleUtility.GUIPointToWorldRay(Event.current.mousePosition);
-        Vector2 pos = new Vector2(mouseRay.origin.x, mouseRay.origin.y);
-        Debug.Log("getMouseRay: " + pos);
-        return pos;
-    }
 
-    public Vector2 getMouseScreen()
-    {
-        Vector2 pos = HandleUtility.GUIPointToScreenPixelCoordinate(Event.current.mousePosition);
-        Debug.Log("getMouseRay: " + pos);
-        return pos;
-    }
 
 
     void OnSceneGUI()
     {
-/*
+
         if (ToolBox.processTool(curTool))
         {//Если ToolBox вернул true, значит инструмент завершил работу и его можно удалить
             curTool = null;
         }
-*/
+
+
+        
         Event guiEvent = Event.current;
+        /*
         Ray mouseRay = HandleUtility.GUIPointToWorldRay(guiEvent.mousePosition);
         if (guiEvent.type == EventType.MouseDown && guiEvent.button == 0)
         {
@@ -51,7 +41,7 @@ public class ShapeEditor : Editor, CoordHolder
         {
             shapeCreator.points.Clear();
         }
-
+        */
         renderNodes();
         renderEdges();
         renderPolygons();
@@ -99,7 +89,6 @@ public class ShapeEditor : Editor, CoordHolder
 
             for (int i = gp.Value.getVertices().Length-4; i >= 0; i=i-2)
             {
-                Debug.Log("dr poly: " + i);
                 Handles.color = Color.magenta;
                 Handles.DrawLine(new Vector2(gp.Value.getVertices()[i], gp.Value.getVertices()[i+1]), new Vector2(gp.Value.getVertices()[i+2], gp.Value.getVertices()[i+3]));
                 Handles.color = Color.yellow;

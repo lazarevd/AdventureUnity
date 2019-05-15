@@ -8,5 +8,4 @@ public interface CoordHolder
 
     Vector2 getMouseScreen();
 
-
 }
