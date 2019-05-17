@@ -6,6 +6,7 @@ using System.Linq;
 using UnityEditor;
 
 public class ShapeCreator : MonoBehaviour
+
 {
     [HideInInspector]
     public List<Vector2> points = new List<Vector2>();
@@ -17,6 +18,11 @@ public class ShapeCreator : MonoBehaviour
     public bool NODE = true;
     [HideInInspector]
     public bool POLY = true;
+
+    [HideInInspector]
+    public bool needsRepaint;
+    [HideInInspector]
+    public Tool curTool;
 
 
 
@@ -33,6 +39,106 @@ public class ShapeCreator : MonoBehaviour
         poes = new Dictionary<string, GraphPointOnEdge>();
 
     }
+
+
+    public void render()
+    {
+        if (ToolBox.processTool(curTool))
+        {//Если ToolBox вернул true, значит инструмент завершил работу и его можно удалить
+            curTool = null;
+        }
+
+
+
+        Event guiEvent = Event.current;
+        /*
+        Ray mouseRay = HandleUtility.GUIPointToWorldRay(guiEvent.mousePosition);
+        if (guiEvent.type == EventType.MouseDown && guiEvent.button == 0)
+        {
+            Vector2 pos = new Vector2(mouseRay.origin.x, mouseRay.origin.y);
+            GraphNode grnod = new GraphNode(mouseRay.origin.x, mouseRay.origin.y, 5);
+            shapeCreator.addNode(grnod);
+            Debug.Log("add: " + pos);
+            needsRepaint = true;
+        }
+
+        if (shapeCreator.points.Count > 4)
+        {
+            shapeCreator.points.Clear();
+        }
+        */
+        renderNodes();
+        renderEdges();
+        renderPolygons();
+
+        if (needsRepaint)
+        {
+            HandleUtility.Repaint();
+            needsRepaint = false;
+        }
+
+        if (guiEvent.type == EventType.Layout)
+        {
+            HandleUtility.AddDefaultControl(GUIUtility.GetControlID(FocusType.Passive));
+        }
+    }
+
+    public void OnGUI()
+    {
+       
+    }
+
+    private void renderNodes()
+    {
+        foreach (KeyValuePair<string, GraphNode> gn in getNodes())
+        {
+            Handles.DrawSolidDisc(new Vector2(gn.Value.getX(), gn.Value.getY()), Vector3.forward, .3f);
+        }
+    }
+
+
+    private void renderEdges()
+    {
+        Handles.color = Color.white;
+        foreach (KeyValuePair<string, GraphEdge> ge in getEdges())
+        {
+            GraphNode[] gns = new GraphNode[2];
+            gns[0] = getNodeByName(ge.Value.getNodes()[0]);
+            gns[1] = getNodeByName(ge.Value.getNodes()[1]);
+            float x1 = gns[0].getX();
+            float y1 = gns[0].getY();
+            float x2 = gns[1].getX();
+            float y2 = gns[1].getY();
+            Handles.DrawLine(new Vector2(x1, y1), new Vector2(x2, y2));
+        }
+    }
+
+
+    private void renderPolygons()
+    {
+
+        foreach (KeyValuePair<string, GraphPolygon4> gp in getPolygons())
+        {
+
+
+            for (int i = gp.Value.getVertices().Length - 4; i >= 0; i = i - 2)
+            {
+                Handles.color = Color.magenta;
+                Handles.DrawLine(new Vector2(gp.Value.getVertices()[i], gp.Value.getVertices()[i + 1]), new Vector2(gp.Value.getVertices()[i + 2], gp.Value.getVertices()[i + 3]));
+                Handles.color = Color.yellow;
+                Handles.DrawSolidDisc(new Vector2(gp.Value.getVertices()[i], gp.Value.getVertices()[i + 1]), Vector3.forward, .1f);
+            }
+            Handles.color = Color.magenta;
+            Handles.DrawLine(new Vector2(gp.Value.getVertices()[gp.Value.getVertices().Length - 2], gp.Value.getVertices()[gp.Value.getVertices().Length - 1]), new Vector2(gp.Value.getVertices()[0], gp.Value.getVertices()[1]));
+            Handles.color = Color.yellow;
+            Handles.DrawSolidDisc(new Vector2(gp.Value.getVertices()[gp.Value.getVertices().Length - 2], gp.Value.getVertices()[gp.Value.getVertices().Length - 1]), Vector3.forward, .1f);
+            /*
+           [0 1 2 3 4 5 6 7]
+            1 2 3 4 5 6 7 8
+            */
+        }
+    }
+
 
 
     public Vector2 getMouseRay()
@@ -60,6 +166,10 @@ public class ShapeCreator : MonoBehaviour
         this.toolDisplayStatus = displayMode;
     }
 
+    public void OnPostRender()
+    {
+        
+    }
 
 
     public void SaveGraph()
@@ -192,7 +302,7 @@ public class ShapeCreator : MonoBehaviour
                     }
 
                 }
-                catch (NullReferenceException nex)
+                catch (NullReferenceException)
                 {
                     Debug.Log("error adding edge");
                 }

@@ -16,6 +16,7 @@ public class MoveNodePoly : Tool
     }
 
 
+
     private ToolStatus toolStat;
 
 
@@ -51,6 +52,7 @@ public class MoveNodePoly : Tool
     {
         movePolygonVertex();
         moveNode();
+        shapeCreator.needsRepaint = true;
     }
     else if (shapeCreator.NODE == true)
     {
@@ -80,7 +82,7 @@ public void movePolygonVertex()
     Vector2 touchPos = shapeCreator.getMouseRay();
     Event guiEvent = Event.current;
         if (guiEvent.type == EventType.MouseDrag && guiEvent.button == 0) {
-            Debug.Log("movePolygonVertex");
+            //Debug.Log("movePolygonVertex");
 
             if (shapeCreator.POLY == true)
         {
@@ -132,7 +134,7 @@ public void movePolygonVertex()
                     movePolygon = curPolygon;
                 }
 
-                    Debug.Log("the distance " + movePolygon.getDistanceToVertex(moveVertex, shapeCreator.getMouseRay().x, shapeCreator.getMouseRay().y));
+                    //Debug.Log("the distance " + movePolygon.getDistanceToVertex(moveVertex, shapeCreator.getMouseRay().x, shapeCreator.getMouseRay().y));
 
                 if (movePolygon.getDistanceToVertex(moveVertex, shapeCreator.getMouseRay().x, shapeCreator.getMouseRay().y) < 20)
                 {
