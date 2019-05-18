@@ -140,7 +140,7 @@ public void movePolygonVertex()
                 {
                     movePolygon.setVertexXY(moveVertex, shapeCreator.getMouseRay().x, shapeCreator.getMouseRay().y);
                     //RenderShapes.drawPoint(UI.getCursor(), 5, RenderShapes.Colour.RED);
-                }
+                } 
             }
 
         }

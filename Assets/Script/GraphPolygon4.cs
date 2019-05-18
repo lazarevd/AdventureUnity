@@ -32,27 +32,32 @@ public class GraphPolygon4
 
 
 
-
     public Vector2 getCentreOf4Poly()
     {
-        Vector2[] middleLines = getMiddleLines();
-        float xS1 = middleLines[0].x - middleLines[2].x;
-        float yS1 = middleLines[0].y - middleLines[2].y;
-        float xS2 = middleLines[1].x - middleLines[3].x;
-        float yS2 = middleLines[1].y - middleLines[3].y;
-        float k1 = yS1 / xS1;
-        float k2 = yS2 / xS2;
-        float x = (k2 + yS2 - yS1)/k1;
-        float y = k1 * x + yS1;
-        return new Vector2(x,y);
+        Vector2[] middlePoints = getMiddlePoints();
+        float y1 = middlePoints[2].y;
+        float x1 = middlePoints[2].x;
+        float y2 = middlePoints[0].y;
+        float x2 = middlePoints[0].x;
+        float k = (y2 - y1) / (x2 - x1);
+        float yS1 = middlePoints[1].y;
+        float xS1 = middlePoints[1].x;
+        float yS2 = middlePoints[3].y;
+        float xS2 = middlePoints[3].x;
+        float kS = (yS2 - yS1) / (xS2 - xS1);
+        float x = (k * x1 - y1 - kS * xS1 + yS1) / (k - kS);
+        float y = k * x - k * x1 + y1;
+
+        return new Vector2(x, y);
     }
 
-    public Vector2[] getMiddleLines()
+     
+    public Vector2[] getMiddlePoints()
     {
         int edgeCnt = vertices.Length / 2;
         Debug.Log(edgeCnt);
         Vector2[] ret = new Vector2[edgeCnt];
-        for (int edge = 0; edge < edgeCnt; edge++)
+        for (int edge = 1; edge <= edgeCnt; edge++)
         {
             float length = 0.5f;
             Vector2[] edVec = new Vector2[2];
@@ -61,7 +66,7 @@ public class GraphPolygon4
             tmp = MathGame.scl(tmp, length);
             tmp.x = tmp.x + edVec[0].x;
             tmp.y = tmp.y + edVec[0].y;
-            ret[edge] = tmp;
+            ret[edge-1] = tmp;
         }
         return ret;
     }

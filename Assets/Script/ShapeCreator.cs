@@ -48,8 +48,6 @@ public class ShapeCreator : MonoBehaviour
             curTool = null;
         }
 
-
-
         Event guiEvent = Event.current;
         /*
         Ray mouseRay = HandleUtility.GUIPointToWorldRay(guiEvent.mousePosition);
@@ -135,11 +133,11 @@ public class ShapeCreator : MonoBehaviour
             Handles.color = Color.red;
             Handles.DrawSolidDisc(gp.Value.getCentreOf4Poly(), Vector3.forward, .1f);
 
-            Vector2[] midPoints = gp.Value.getMiddleLines();
+            Vector2[] midPoints = gp.Value.getMiddlePoints();
             for (int i = 0; i < midPoints.Length; i ++)
             {
                 Handles.color = Color.white;
-                Handles.DrawSolidDisc(gp.Value.getCentreOf4Poly(), Vector3.forward, .05f);
+                Handles.DrawSolidDisc(midPoints[i], Vector3.forward, .05f);
             }
 
             /*
