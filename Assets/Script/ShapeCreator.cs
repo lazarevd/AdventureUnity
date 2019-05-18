@@ -132,6 +132,16 @@ public class ShapeCreator : MonoBehaviour
             Handles.DrawLine(new Vector2(gp.Value.getVertices()[gp.Value.getVertices().Length - 2], gp.Value.getVertices()[gp.Value.getVertices().Length - 1]), new Vector2(gp.Value.getVertices()[0], gp.Value.getVertices()[1]));
             Handles.color = Color.yellow;
             Handles.DrawSolidDisc(new Vector2(gp.Value.getVertices()[gp.Value.getVertices().Length - 2], gp.Value.getVertices()[gp.Value.getVertices().Length - 1]), Vector3.forward, .1f);
+            Handles.color = Color.red;
+            Handles.DrawSolidDisc(gp.Value.getCentreOf4Poly(), Vector3.forward, .1f);
+
+            Vector2[] midPoints = gp.Value.getMiddleLines();
+            for (int i = 0; i < midPoints.Length; i ++)
+            {
+                Handles.color = Color.white;
+                Handles.DrawSolidDisc(gp.Value.getCentreOf4Poly(), Vector3.forward, .05f);
+            }
+
             /*
            [0 1 2 3 4 5 6 7]
             1 2 3 4 5 6 7 8
@@ -387,9 +397,8 @@ public class ShapeCreator : MonoBehaviour
     }
 
 
-    static class GenericGetter<T>
-    {
-        public static int getLastId(Dictionary<string, T> dict)
+
+        public static int getLastId<T>(Dictionary<string, T> dict)
         {
 
             int curInt = 0;
@@ -424,29 +433,28 @@ public class ShapeCreator : MonoBehaviour
 
         }
 
-    }
 
 
 
 
     public int getLastNodeNameNumber()
     {
-        return ShapeCreator.GenericGetter<GraphNode>.getLastId(nodes);
+        return ShapeCreator.getLastId<GraphNode>(nodes);
     }
 
     public int getLastPOENameNumber()
     {
-        return ShapeCreator.GenericGetter<GraphPointOnEdge>.getLastId(poes);
+        return ShapeCreator.getLastId<GraphPointOnEdge>(poes);
     }
 
     public int getLastEdgeNameNumber()
     {
-        return ShapeCreator.GenericGetter<GraphEdge>.getLastId(edges);
+        return ShapeCreator.getLastId<GraphEdge>(edges);
     }
 
     public int getLastPolyNameNumber()
     {
-        return ShapeCreator.GenericGetter<GraphPolygon4>.getLastId(polygons);
+        return ShapeCreator.getLastId<GraphPolygon4>(polygons);
     }
 
 

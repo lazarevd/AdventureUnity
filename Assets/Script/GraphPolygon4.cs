@@ -16,7 +16,9 @@ public class GraphPolygon4
     [System.NonSerialized]
     public DrawStat drawStat;
 
+    private string id;
     private float[] vertices;
+    private Vector2[] centerPoes = new Vector2[4];
 
 
     public GraphPolygon4()
@@ -26,6 +28,42 @@ public class GraphPolygon4
         shapeCreator = thePlayer.GetComponent<ShapeCreator>();
         pointsOnEdges = new List<string>();
         drawStat = DrawStat.NORMAL;
+    }
+
+
+
+
+    public Vector2 getCentreOf4Poly()
+    {
+        Vector2[] middleLines = getMiddleLines();
+        float xS1 = middleLines[0].x - middleLines[2].x;
+        float yS1 = middleLines[0].y - middleLines[2].y;
+        float xS2 = middleLines[1].x - middleLines[3].x;
+        float yS2 = middleLines[1].y - middleLines[3].y;
+        float k1 = yS1 / xS1;
+        float k2 = yS2 / xS2;
+        float x = (k2 + yS2 - yS1)/k1;
+        float y = k1 * x + yS1;
+        return new Vector2(x,y);
+    }
+
+    public Vector2[] getMiddleLines()
+    {
+        int edgeCnt = vertices.Length / 2;
+        Debug.Log(edgeCnt);
+        Vector2[] ret = new Vector2[edgeCnt];
+        for (int edge = 0; edge < edgeCnt; edge++)
+        {
+            float length = 0.5f;
+            Vector2[] edVec = new Vector2[2];
+            edVec = getEdge(edge);
+            Vector2 tmp = new Vector2(edVec[1].x - edVec[0].x, edVec[1].y - edVec[0].y);
+            tmp = MathGame.scl(tmp, length);
+            tmp.x = tmp.x + edVec[0].x;
+            tmp.y = tmp.y + edVec[0].y;
+            ret[edge] = tmp;
+        }
+        return ret;
     }
 
 
@@ -64,7 +102,6 @@ public class GraphPolygon4
     public string getThisId()
     {
         string ret = null;
-
         foreach (KeyValuePair<string, GraphPolygon4> entry in shapeCreator.getPolygons())
         {
             if (entry.Value.Equals(this))
@@ -73,7 +110,6 @@ public class GraphPolygon4
                 break;
             }
         }
-
         return ret;
     }
 
@@ -81,11 +117,7 @@ public class GraphPolygon4
     public string getNewPOEName()
     {
         string newName = "poe";
-
         newName += (getLastPOENameNumber() + 1);
-
-
-
         return newName;
     }
 

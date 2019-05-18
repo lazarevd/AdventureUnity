@@ -14,8 +14,6 @@ public class GraphPointOnEdge
     private float edgePosition;
     private string parentPoly;
 
-    
-
     private GraphPointOnEdge() { }
 
     public GraphPointOnEdge(string poly, int parentEdge, float k)
@@ -44,9 +42,6 @@ public class GraphPointOnEdge
 
         return ret;
     }
-
-
-
 
     public void setChildNode(string name)
     {
@@ -99,22 +94,16 @@ public class GraphPointOnEdge
 
     public void setPointPosition()
     {
-
         int edge = this.parentEdge;
         float length = this.edgePosition;
-
         Vector2[] edVec = new Vector2[2];
         Vector2 tmp;
 
-
         edVec = shapeCreator.getPolygons()[this.parentPoly].getEdge(edge);
         tmp = new Vector2(edVec[1].x - edVec[0].x, edVec[1].y - edVec[0].y);
-
         tmp = MathGame.scl(tmp, length);
         tmp.x = tmp.x + edVec[0].x;
         tmp.y = tmp.y + edVec[0].y;
-
         setPosition(tmp);
-
     }
 }

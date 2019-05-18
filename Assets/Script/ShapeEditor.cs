@@ -39,7 +39,7 @@ public class ShapeEditor : Editor
         {
             Debug.Log("hit Add poly");
             float[] polyFloat = { -1.5f, 0f, -1.5f, -1.0f, 1.5f, 0f, 0f, 1.5f };
-            shapeCreator.addPolygon("poly1", new GraphPolygon4(polyFloat));
+            shapeCreator.addPolygon("poly"+ (shapeCreator.getLastPolyNameNumber()+1), new GraphPolygon4(polyFloat));
 
         }
 
