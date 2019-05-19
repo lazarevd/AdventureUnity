@@ -17,8 +17,6 @@ public class GraphNode
 	private float x, y;
     private float renderScale;
     [System.NonSerialized]
-    private string parentGraphNode;
-    [System.NonSerialized]
     private List<string> neighbours;
     [System.NonSerialized]
     private int G, H; //G - from start cost, H - to finish heuristic cost.
@@ -41,7 +39,6 @@ public class GraphNode
         this.y = y2;
         this.renderScale = renderScale;
         this.color = Color.yellow;
-        this.parentGraphNode = null;
         this.G = 0;
     }
 
@@ -250,18 +247,6 @@ public class GraphNode
     }
 
 
-
-
-
-    public void setParent(string parent)
-    {
-        this.parentGraphNode = parent;
-    }
-
-    public string getParent()
-    {
-        return this.parentGraphNode;
-    }
 
     public GraphNodeType GetNodeType()
     {
