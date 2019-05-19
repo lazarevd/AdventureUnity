@@ -8,6 +8,7 @@ public class MoveNodePoly : Tool
 
     ShapeCreator shapeCreator;
     GraphPolygon4 currentPoly;
+    Vector2[] vertexToCentroidVectors;
     int currentVertex;
 
     public MoveNodePoly()
@@ -76,92 +77,122 @@ public class MoveNodePoly : Tool
 
 
 
+    private void computeVertToCenterVectors(GraphPolygon4 currPolygon)
+    {
+        Vector2[] vecToCenter = new Vector2[currPolygon.getVertices().Length / 2];
+        Vector2 centorid = currPolygon.getCentreOf4Poly();
+        for (int i = 1; i <= vecToCenter.Length; i++)
+        {
+            Vector2 tmp = currPolygon.getVertexXY(i) - centorid;
+            vecToCenter[i - 1] = tmp;
+            Debug.Log("vec to cen" + vecToCenter[i - 1] + " " + (i-1));
+        }
+        vertexToCentroidVectors = vecToCenter;
+    }
 
-public void movePolygonVertex()
-{
 
 
-    Vector2 touchPos = shapeCreator.getMouseRay();
-    Event guiEvent = Event.current;
+    private void defineNearestPolyAndVertex()
+    {
+        List<GraphPolygon4> polys = new List<GraphPolygon4>();
+
+        foreach (KeyValuePair<string, GraphPolygon4> entry in shapeCreator.getPolygons())
+        {
+            polys.Add(entry.Value);
+        }
+        GraphPolygon4 curPolygon, movePolygon;
+        int moveVertex;  //IDs of vertex in poly
+        int curVertex;
+        float curDistance;
+        float distance;
+        float theDistance;
+
+        if (currentPoly == null)
+        {
+            if (polys.Count > 0)
+            {
+                curPolygon = polys[polys.Count - 1];
+                movePolygon = curPolygon;
+                moveVertex = 1;
+                theDistance = curPolygon.getDistanceToVertex(1, shapeCreator.getMouseRay().x, shapeCreator.getMouseRay().y);
+                curDistance = 0;
+
+                foreach (GraphPolygon4 pol in polys)
+                {//Loop polys
+                    curVertex = 1;
+                    curDistance = pol.getDistanceToVertex(1, shapeCreator.getMouseRay().x, shapeCreator.getMouseRay().y);
+                    for (int i = 1; i <= 4; i++)
+                    {
+                        distance = pol.getDistanceToVertex(i, shapeCreator.getMouseRay().x, shapeCreator.getMouseRay().y);
+                        if (distance < curDistance)
+                        {
+                            curVertex = i;
+                            curDistance = distance;
+                        }
+                    }
+                    if (curDistance < theDistance)
+                    {
+                        curPolygon = pol;
+                        theDistance = curDistance;
+                        moveVertex = curVertex;
+                    }
+                    movePolygon = curPolygon;
+
+                }
+                currentPoly = movePolygon;//set working poly
+                currentVertex = moveVertex;
+                //Debug.Log("the distance " + movePolygon.getDistanceToVertex(moveVertex, shapeCreator.getMouseRay().x, shapeCreator.getMouseRay().y));
+
+            }
+        }
+    }
+
+    public void movePolygonVertex()
+    {
+        Vector2 touchPos = shapeCreator.getMouseRay();
+        Event guiEvent = Event.current;
         if (guiEvent.type == EventType.MouseDown && guiEvent.button == 0) {//chose poly
             //Debug.Log("movePolygonVertex");
 
             if (shapeCreator.POLY == true)
             {
-            List<GraphPolygon4> polys = new List<GraphPolygon4>();
-
-            foreach (KeyValuePair<string, GraphPolygon4> entry in shapeCreator.getPolygons())
-            {
-                polys.Add(entry.Value);
-            }
-            GraphPolygon4 curPolygon, movePolygon;
-            int moveVertex;  //IDs of vertex in poly
-            int curVertex;
-            float curDistance;
-            float distance;
-            float theDistance;
-
-                if (currentPoly == null)
+                defineNearestPolyAndVertex();
+                if (currentPoly != null)
                 {
-                    if (polys.Count > 0)
-                    {
-                        curPolygon = polys[polys.Count - 1];// Test only
-                        movePolygon = curPolygon;
-                        moveVertex = 1;
-                        theDistance = curPolygon.getDistanceToVertex(1, shapeCreator.getMouseRay().x, shapeCreator.getMouseRay().y);
-                        curDistance = 0;
-
-                        foreach (GraphPolygon4 pol in polys)
-                        {//Loop polys
-                            curVertex = 1;
-                            curDistance = pol.getDistanceToVertex(1, shapeCreator.getMouseRay().x, shapeCreator.getMouseRay().y);
-                            for (int i = 1; i <= 4; i++)
-                            {
-                                distance = pol.getDistanceToVertex(i, shapeCreator.getMouseRay().x, shapeCreator.getMouseRay().y);
-                                if (distance < curDistance)
-                                {
-                                    curVertex = i;
-                                    curDistance = distance;
-                                }
-                            }
-                            if (curDistance < theDistance)
-                            {
-                                curPolygon = pol;
-                                theDistance = curDistance;
-                                moveVertex = curVertex;
-
-                            }
-                            movePolygon = curPolygon;
-
-                        }
-                        currentPoly = movePolygon;//set working poly
-                        currentVertex = moveVertex;
-                    //Debug.Log("the distance " + movePolygon.getDistanceToVertex(moveVertex, shapeCreator.getMouseRay().x, shapeCreator.getMouseRay().y));
-
-                    }
+                    computeVertToCenterVectors(currentPoly);
                 }
             }
         }
 
-            if (guiEvent.type == EventType.MouseDrag && guiEvent.button == 0)
+        if (guiEvent.type == EventType.MouseDrag && guiEvent.button == 0)
         {
-            if (currentPoly != null && currentVertex != 0)
+            if (currentPoly != null)
             {
-                if (currentPoly.getDistanceToVertex(currentVertex, shapeCreator.getMouseRay().x, shapeCreator.getMouseRay().y) < 20)
+                if (currentVertex != 0 && currentPoly.getDistanceToVertex(currentVertex, shapeCreator.getMouseRay().x, shapeCreator.getMouseRay().y) < 1)
                 {
                     currentPoly.setVertexXY(currentVertex, shapeCreator.getMouseRay().x, shapeCreator.getMouseRay().y);
                 }
+
+                else if (currentPoly.getDistanceToCentroid(shapeCreator.getMouseRay().x, shapeCreator.getMouseRay().y) < 1)
+                {
+                    for (int i = 1; i <= currentPoly.getVertices().Length / 2; i++)
+                    {
+                        Vector2 tmpPos = shapeCreator.getMouseRay() + vertexToCentroidVectors[i - 1];
+                        currentPoly.setVertexXY(i, tmpPos.x, tmpPos.y);
+                    }
+                }
+
+                // Debug.Log("Vertex dist: " + currentPoly.getDistanceToVertex(currentVertex, shapeCreator.getMouseRay().x, shapeCreator.getMouseRay().y));
+
+                
             }
         }
 
-            if (guiEvent.type == EventType.MouseUp && guiEvent.button == 0)
+        if (guiEvent.type == EventType.MouseUp && guiEvent.button == 0)
         {
             currentPoly = null;
             currentVertex = 0;
         }
-
-
-
     }
 
 

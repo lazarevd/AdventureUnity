@@ -55,7 +55,6 @@ public class GraphPolygon4
     public Vector2[] getMiddlePoints()
     {
         int edgeCnt = vertices.Length / 2;
-        Debug.Log(edgeCnt);
         Vector2[] ret = new Vector2[edgeCnt];
         for (int edge = 1; edge <= edgeCnt; edge++)
         {
@@ -334,6 +333,14 @@ public class GraphPolygon4
             //RenderShapes.drawLine(edge[0], normal, Colour.GREEN);
         }
 
+    }
+
+
+    public float getDistanceToCentroid(float x, float y)
+    {
+        Vector2 vertexXY = getCentreOf4Poly();
+
+        return Vector2.Distance(new Vector2(vertexXY.x, vertexXY.y), new Vector2(x, y)); ;
     }
 
 
